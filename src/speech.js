@@ -23,6 +23,15 @@ export default class Speech extends Component {
     this.setButtonState('all', 'none', 'none', 'none');
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.text !== prevProps.text) {
+      if (this.props.autoPlay) {
+        this.setSpeechSynthesis();
+        this.speechSynthesis.speak();
+      }
+    }
+  }
+
   setButtonState(play, stop, pause, resume) {
     var newState = update(this.state, {
       styles: {
@@ -43,6 +52,7 @@ export default class Speech extends Component {
   }
 
   play() {
+    console.log('am i here inside play?????');
     this.setSpeechSynthesis();
     this.speechSynthesis.speak();
     this.setButtonState('none', 'all', 'all', 'none');
@@ -99,25 +109,26 @@ export default class Speech extends Component {
           </span>
         </Button>
       );
-    } else {
-      play = (
-        <Button
-          className="rs-play"
-          styles={this.state.styles.play}
-          onClick={this.play}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={this.state.styles.play.width}
-            height={this.state.styles.play.height}
-            viewBox="0 0 24 24"
-          >
-            <path d="M8 5v14l11-7z" />
-            <path d="M0 0h24v24H0z" fill="none" />
-          </svg>
-        </Button>
-      );
-    }
+    };
+    // else {
+    //   play = (
+    //     <Button
+    //       className="rs-play"
+    //       styles={this.state.styles.play}
+    //       onClick={this.play}
+    //     >
+    //       <svg
+    //         xmlns="http://www.w3.org/2000/svg"
+    //         width={this.state.styles.play.width}
+    //         height={this.state.styles.play.height}
+    //         viewBox="0 0 24 24"
+    //       >
+    //         <path d="M8 5v14l11-7z" />
+    //         <path d="M0 0h24v24H0z" fill="none" />
+    //       </svg>
+    //     </Button>
+    //   );
+    // }
 
     if (this.props.stop) {
       stop = (
@@ -188,6 +199,7 @@ export default class Speech extends Component {
 }
 
 Speech.propTypes = {
+  autoPlay: PropTypes.bool,
   styles: PropTypes.object,
   text: PropTypes.string.isRequired,
   pitch: PropTypes.string,
